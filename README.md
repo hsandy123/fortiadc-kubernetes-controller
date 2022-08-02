@@ -6,7 +6,7 @@
 ## Get Repo Information
    
 
-    helm repo add fortiadc-ingress-controller https://ytlai.github.io/fortiadc-ingress/
+    helm repo add fortiadc-ingress-controller https://hsandy123.github.io/fortiadc-ingress/
 
     helm repo update
 
