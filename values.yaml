@@ -8,7 +8,7 @@ image:
   tag: "08022022"
 
 imagePullSecrets:
-  - name: regcred
+  - name: docker1
 
 nameOverride: ""
 fullnameOverride: ""
