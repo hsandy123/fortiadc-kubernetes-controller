@@ -3,9 +3,9 @@
 # Declare variables to be passed into your templates.
 # FortiADC Ingress Controller image from Dockerhub.com
 image:
-  repository: ytlai/fortiadc-k8s-ctrl
+  repository: hsandy123/fortiadc-k8s-ctrl
   pullPolicy: IfNotPresent
-  tag: "e7.1"
+  tag: "08022022"
 
 imagePullSecrets:
   - name: regcred

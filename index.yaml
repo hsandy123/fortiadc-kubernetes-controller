@@ -9,6 +9,6 @@ entries:
     name: fadc-k8s-ctrl
     type: application
     urls:
-    - https://github.com/ytlai/fortiadc-ingress/releases/latest/download/fortiadc-ingress.tar.gz
+    - https://github.com/hsandy123/fortiadc-ingress/releases/latest/download/fortiadc-ingress.tar.gz
     version: 1.0.1
 generated: "2021-08-23T08:21:32.196501008Z"
