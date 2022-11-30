@@ -44,6 +44,8 @@ spec:
             value: {{ .Values.parameters.virtualServerCaptchaProfile }}
           - name: VirtualServerPersistence
             value: {{ .Values.parameters.virtualServerPersistence }}
+          - name: OpenshiftRouteSupport
+            value: {{ .Values.parameters.openshiftRouteSupport }}
 
 #   envFrom:
 #          - configMapRef:
