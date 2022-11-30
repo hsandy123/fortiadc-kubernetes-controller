@@ -52,4 +52,4 @@ parameters:
   virtualServerDosProfile : "optional"
   virtualServerCaptchaProfile : "optional"
   virtualServerPersistence : "optional"
-  openshiftRouteSupport: "true"
+  openshiftRouteSupport: "yes"
