@@ -33,7 +33,7 @@ rules:
   - ingresses/status
   verbs:
   - update
-{{- if .Values.parameters.openshiftRouteSupport }}
+{{- if eq .Values.parameters.openshiftRouteSupport "true" }}
 - apiGroups:
   - route.openshift.io
   resources:
