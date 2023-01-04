@@ -5,10 +5,10 @@
 image:
   repository: hsandy123/fortiadc-k8s-ctrl
   pullPolicy: IfNotPresent
-  tag: "1.0.2-036"
+  tag: "1.0.3-001"
 
 imagePullSecrets:
-  - name: docker1
+  - name: regcred
 
 nameOverride: ""
 fullnameOverride: ""
