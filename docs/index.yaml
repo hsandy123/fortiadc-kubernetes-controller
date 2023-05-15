@@ -2,36 +2,36 @@ apiVersion: v1
 entries:
   fadc-k8s-ctrl:
   - apiVersion: v2
-    appVersion: 2.0.0
-    created: "2023-05-15T14:51:25.112507184+08:00"
+    appVersion: 2.0.0-3
+    created: "2023-05-15T15:32:41.610190625+08:00"
     description: A Helm chart for FortiADC Ingress Controller
-    digest: 32a9eb28eb70ab168e395eb54e733a5b86d08fa5976c5fa42e4552d03dc83063
+    digest: 2fb86113bfe9b878ed69e7c75f9e272005dfa424575f0aa95c8c80fe48a7ddbf
     kubeVersion: '>= 1.19.8-0, <= 1.27-0'
     name: fadc-k8s-ctrl
     type: application
     urls:
-    - https://github.com/fortinet/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-2.0.0.tgz
-    version: 2.0.0
+    - https://github.com/hsandy123/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-2.0.0-3.tgz
+    version: 2.0.0-3
   - apiVersion: v2
     appVersion: 1.0.1
-    created: "2023-05-15T14:51:25.112253351+08:00"
+    created: "2023-05-15T15:32:41.609931573+08:00"
     description: A Helm chart for FortiADC Ingress Controller
     digest: 2f44ff7c32e02347063885d524d658f946dcccf5b738e9c255825b17e89aaf74
     kubeVersion: '>= 1.19.8-0, <= 1.24-0'
     name: fadc-k8s-ctrl
     type: application
     urls:
-    - https://github.com/fortinet/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-1.0.1.tgz
+    - https://github.com/hsandy123/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-1.0.1.tgz
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-05-15T14:51:25.111919049+08:00"
+    created: "2023-05-15T15:32:41.609704995+08:00"
     description: A Helm chart for FortiADC Ingress Controller
     digest: 61d443ca6fd89bb47d156a34c7d19d3a9654bf18736631e3ba340cdf4724a0ce
     kubeVersion: '>= 1.19.8-0, <= 1.23-0'
     name: fadc-k8s-ctrl
     type: application
     urls:
-    - https://github.com/fortinet/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-1.0.0.tgz
+    - https://github.com/hsandy123/fortiadc-ingress/raw/main/docs/fadc-k8s-ctrl-1.0.0.tgz
     version: 1.0.0
-generated: "2023-05-15T14:51:25.111509305+08:00"
+generated: "2023-05-15T15:32:41.60931191+08:00"
