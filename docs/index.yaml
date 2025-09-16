@@ -33,7 +33,7 @@ entries:
     type: application
     urls:
     - https://github.com/hsandy123/fortiadc-kubernetes-controller/raw/main/docs/fadc-k8s-ctrl-3.0.0-2.tgz
-    version: 3.0.0-1
+    version: 3.0.0-2
   - apiVersion: v3
     appVersion: 3.0.0-1
     created: "2025-09-03T19:44:39.052790225-07:00"
