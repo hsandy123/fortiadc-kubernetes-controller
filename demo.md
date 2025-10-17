@@ -1,11 +1,7 @@
-
-# Demo: FortiADC integration with FortiADC Kubernetes Controller: TCP VirtualServer Custom Resource for PostgreSQL service running inside Kubernetes
-This demo shows how we can define a **TCP VirtualServer** as a **Custom Resource (CR)** inside the Kubernetes cluster — using our own VirtualServer CRD.
-
-The **FortiADC Kubernetes Controller** watches VirtualServer Custom Resource and associated resources like **Services, Pods, and VXLAN networking**, then **translates and deploys them** into corresponding **FortiADC objects**.
-
-As a result, users can simply connect to the **FortiADC TCP VirtualServer**, and that traffic is securely proxied to the **PostgreSQL database running inside Kubernetes**.
-
+# FortiADC integration with FortiADC Kubernetes Controller: VirtualServer CustomResource that supports for Kubernetes TCP/UDP services
+-   **Introduction to the VirtualServer CRD** – Enabling support for Kubernetes TCP/UDP services beyond traditional HTTP routing.
+-   **Calico with VXLAN CNI Integration** – Leveraging Calico's VXLAN support for flexible, scalable network overlays.
+-   **Live Demo Scenario** – Showcasing real-world use of the VirtualServer CRD and Calico VXLAN in a Kubernetes environment. This demo shows how we can define a **TCP VirtualServer** as a **Custom Resource (CR)** inside the Kubernetes cluster — using our own VirtualServer CRD. The **FortiADC Kubernetes Controller** watches for VirtualServer Custom Resource and associated resources like **Services, Pods, and VXLAN networking**, then **translates and deploys them** into corresponding **FortiADC objects**. As a result, users can simply connect to the **FortiADC TCP VirtualServer**, and that traffic is securely proxied to the **PostgreSQL database running inside Kubernetes**.
 
 ```mermaid
 flowchart LR
@@ -31,7 +27,7 @@ flowchart LR
 2.  Integration Steps:
     How to integrate FortiADC with Kubernetes in a Calico VXLAN environment.
 3.  Deployment Steps:
-    How to deploy the TCP Virtual Server to expose the PostgreSQL server with SSL enabled.
+    How to deploy the TCP Virtual Server Custom Resource to expose the PostgreSQL server with SSL enabled.
 
 ## Scenario Overview
 
@@ -215,7 +211,7 @@ By default Calico set CIDR netmask to be 10.1.0.0/16, in the fake node we set ou
 So for overlay tunnel interface, set 10.1.187.192/16 as the interface IP/netmask.
 
 
-## Deploy the TCP Virtual Server to expose the PostgreSQL server with SSL enabled.
+## Deploy the TCP Virtual Server Custom Resource to expose the PostgreSQL server with SSL enabled.
 
 ### Installation
 Install the FortiADC Kubernetes Controller using Helm Charts.
@@ -233,6 +229,16 @@ The version of cert manager we had verified is v1.18.2
 https://cert-manager.io/docs/installation/
 
 
+    helm repo add jetstack https://charts.jetstack.io
+    helm repo update
+
+    helm install --debug cert-manager jetstack/cert-manager \
+           --namespace cert-manager \
+           --create-namespace \
+           --version v1.19.1 \
+           --set crds.enabled=true
+
+
 #### Create credential to access FortiADC Kubernetes Controller image
 
 Please refer to the private_install.pdf
@@ -246,7 +252,7 @@ Please refer to the private_install.pdf
 
 #### Install FortiADC Ingress Controller
 
-    helm install --devel --debug first-release --namespace fortiadc-ingress --create-namespace --wait fortiadc-kubernetes-controller/fadc-k8s-ctrl
+    helm install --devel --debug first-release --namespace fortiadc-ingress --create-namespace --version 3.1.0-70 --wait fortiadc-kubernetes-controller/fadc-k8s-ctrl
 
 #### Check the installation
 
@@ -265,6 +271,9 @@ Check the log of the FortiADC Kubernetes Controller.
     helm repo update
     helm upgrade --devel --debug --reset-values -n fortiadc-ingress first-release fortiadc-kubernetes-controller/fadc-k8s-ctrl
 
+#### Uninstall Chart
+
+    helm uninstall -n fortiadc-ingress first-release
 
 ### Configuration parameters
 #### FortiADC Authentication Secret
@@ -303,6 +312,7 @@ Configuration parameters are required to be specified in the VirtualServer annot
 | wafProfile               | string   | The name of the Web Application Firewall (WAF) profile to apply.                                                                                                                |                      |
 | captchaProfile           | string   | CAPTCHA profile to enable human verification security features.                                                                                                                 |                      |
 | avProfile                | string   | Antivirus profile to scan traffic for threats.                                                                                                                                  |                      |
+| dosProfile                | string   | The dosProfile defines the configuration used to detect and mitigate denial-of-service (DoS) attacks..                                                                                                                                  |                      |
 | trafficGroup             | string   | The traffic group that this virtual server belongs to for traffic forwarding.                                                                                                   | default              |
 | fortiview                | string   | Enables/disables FortiView, FortiADC's traffic visualization and analytics (`enable` or `disable`).                                                                            | disable              |
 | trafficLog               | string   | Enables/disables logging of traffic handled by this virtual server (`enable` or `disable`).                                                                                     | disable              |
@@ -370,8 +380,14 @@ Modify the VirtualServer Annotation in virtualserver_postgres_ssl.yaml to accomm
     kubectl apply -f virtualserver_postgres_ssl.yaml
 
 Try to access PostgreSQL use psql client.
+
 ```bash
-~$ psql "host=192.168.1.108 port=5432 dbname=mydb user=admin password=StrongP@ssw0rd sslmode=require"
+psql "host=172.23.133.109 port=5432 dbname=mydb user=admin password=StrongP@ssw0rd sslmode=require"
+
+```
+
+```bash
+~$ psql "host=172.23.133.109 port=5432 dbname=mydb user=admin password=StrongP@ssw0rd sslmode=require"
 psql (10.23 (Ubuntu 10.23-0ubuntu0.18.04.2), server 16.10)
 WARNING: psql major version 10, server major version 16.
          Some psql features might not work.
