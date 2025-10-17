@@ -130,9 +130,7 @@ flowchart LR
 
 Download the calico fake node file
 
-```
 	curl -k https://raw.githubusercontent.com/hsandy123/fortiadc-kubernetes-controller/refs/heads/main/node_examples/calico_fake_fadc_node.yaml -o calico_fake_fadc_node.yaml
-```
 
 The fake node configuration also with fake ipamhandle, ipamblock and BlockAffinity configuraion
 These are the network configuration Calico needed for a new node, the node IP address and subnet should be the same in all of these config.
@@ -141,6 +139,7 @@ Apply the Calico fake node to Kubernetes cluster
 
 	kubectl apply -f calico_fake_fadc_node.yaml
 
+### Check calico vxlan vni and port
 
 #### Use kubectl command to check calico vxlan vni and port
 
@@ -149,9 +148,17 @@ Apply the Calico fake node to Kubernetes cluster
 
 
 Without specific configuration in felixconfiguraion, the default Calico VxLAN VNI is 4096, and the VxLAN port is UDP port 4789.
+The default value may not show in felixconfiguraion.
+
+#### The other way is to check vxlan.calico interface
+
+	ip -d link show vxlan.calico
 
 
-#### Found the Mac address that calico assign for the FortiADC fake node
+Calico will create a vxlan.calico interface on each node, you can also directly check the vxlan settings in this interface.
+
+
+### Found the Mac address that calico assign for the FortiADC fake node
 
 
 Calico will assign a MAC address for the FortiADC fake node,  found the address in ARP table of master node.
@@ -173,7 +180,7 @@ Select VXLAN as the Mode and Calico VXLAN as the VXLAN Type, need to set the int
 The following is a sample of FortiADC configuration
 The MAC address that Calico assign for fake node need to configure to FortiADC to vxlan-interface-mac
 
-```
+
 	config system overlay-tunnel
 		edit "k8s_calico"
 			set vxlan-type calico_vxlan
@@ -187,7 +194,7 @@ The MAC address that Calico assign for fake node need to configure to FortiADC t
 			end
 		next
 	end
-```
+
 
 Note that the overlay-tunnel name should be set in annotation "overlay-tunnel" when apply Service to Kubernetes cluster.
 
@@ -233,7 +240,7 @@ Please refer to the private_install.pdf
 #### Get Repo Information
 
 
-    helm repo add fortiadc-kubernetes-controller https://hsandy123.github.io/fortiadc-kubernets-controller/
+    helm repo add fortiadc-kubernetes-controller https://hsandy123.github.io/fortiadc-kubernetes-controller
 
     helm repo update
 
