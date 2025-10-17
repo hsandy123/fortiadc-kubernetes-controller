@@ -208,7 +208,7 @@ Also allow ping/http/https traffic to go through the interface
 Check your Kubernetes Cluster Calico CNI CIDR netmask size with the following
 
 
-	kubectl describe ippool default-ipv4-pool
+	kubectl describe ippool default-ipv4-ippool
 
 
 By default Calico set CIDR netmask to be 10.1.0.0/16, in the fake node we set our fake node ip to be 10.1.187.192
