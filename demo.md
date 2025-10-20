@@ -145,6 +145,10 @@ metadata:
         projectcalico.org/IPv4VXLANTunnelAddr: 10.1.187.192
 ```
 
+By default calico set pod CIDR for Kubernetes cluster is 10.1.0.0/16, each node's pod cidr block is 26
+You can set the IPv4VXLANTunnelAddr in any subset of the pod network if and only if the network subset is not used by another node.
+For example, we claim the subset 10.1.187.192/26 for FortiADC.
+
 Note that ipamhandle, ipamblock, BlockAffinity and node are conneted by the IPv4VXLANTunnelAddr.
 
 The BlockAffinity name and cidr is the same as node name and IPv4VXLANTunnelAddr
@@ -195,7 +199,7 @@ spec:
 ```
 
 
-####Apply the Calico fake node to Kubernetes cluster
+#### Apply the Calico fake node to Kubernetes cluster
 
 	kubectl apply -f calico_fake_fadc_node.yaml
 
@@ -265,14 +269,22 @@ Note that the overlay-tunnel name should be set in annotation "overlay-tunnel" w
 specify the network interface IP and the netmask as the one used in your Kubernetes cluster CIDR netmask size.
 Also allow ping/http/https traffic to go through the interface
 
-Check your Kubernetes Cluster Calico CNI CIDR netmask size with the following
+Here we set the overlay tunnel interface to be 10.1.187.192/16
 
+	config system interface
+		edit "k8s_calico"
+			set type vxlan
+			set vxlan-type calico_vxlan
+			set vdom root
+			set ip 10.1.187.192/16
+			set allowaccess https ping http
+			set mtu 1450
+			set mac addr 66:18:7a:f4:7b:9e
+			config  ha-node-ip-list
+			end
+		next
+	end
 
-	kubectl describe ippool default-ipv4-ippool
-
-
-By default Calico set CIDR netmask to be 10.1.0.0/16, in the fake node we set our fake node ip to be 10.1.187.192
-So for overlay tunnel interface, set 10.1.187.192/16 as the interface IP/netmask.
 
 
 ## Deploy the TCP Virtual Server Custom Resource to expose the PostgreSQL server with SSL enabled.
