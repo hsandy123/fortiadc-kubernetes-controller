@@ -122,6 +122,13 @@ flowchart LR
 ```
 ## Integrate FortiADC with Kubernetes in a Calico VXLAN environment.
 
+### Download FortiADC image
+
+
+    https://info.fortinet.com/files/FortiADC/v8.00/images/NoMainBranch/fadc_8-0_p1_fr2810_calico_vxlan/build_tag_6053/
+
+
+
 ### Deploy FortiADC as a fake node in the Kubernetes cluster
 
 #### Download the calico fake node file
