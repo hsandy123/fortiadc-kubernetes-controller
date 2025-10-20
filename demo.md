@@ -124,14 +124,78 @@ flowchart LR
 
 ### Deploy FortiADC as a fake node in the Kubernetes cluster
 
-Download the calico fake node file
+#### Download the calico fake node file
 
 	curl -k https://raw.githubusercontent.com/hsandy123/fortiadc-kubernetes-controller/refs/heads/main/node_examples/calico_fake_fadc_node.yaml -o calico_fake_fadc_node.yaml
 
 The fake node configuration also with fake ipamhandle, ipamblock and BlockAffinity configuraion
 These are the network configuration Calico needed for a new node, the node IP address and subnet should be the same in all of these config.
 
-Apply the Calico fake node to Kubernetes cluster
+#### Replace the fake node annotation and all ipam config to fit your enviornment
+
+```
+apiVersion: v1
+kind: Node
+metadata:
+    name: fadc-fake-node
+    annotations:
+        #Replace IPv4Address with outgoing interface IP of overlay tunnel
+        projectcalico.org/IPv4Address: 172.23.133.171/24
+        #Replace IPv4VXLANTunnelAddr with your VXLAN interface IP
+        projectcalico.org/IPv4VXLANTunnelAddr: 10.1.187.192
+```
+
+Note that ipamhandle, ipamblock, BlockAffinity and node are conneted by the IPv4VXLANTunnelAddr.
+
+The BlockAffinity name and cidr is the same as node name and IPv4VXLANTunnelAddr
+
+```
+apiVersion: crd.projectcalico.org/v1
+kind: BlockAffinity
+metadata:
+    # Combination of node name and IPv4VXLANTunnelAddr
+    name: fadc-fake-node-10-1-187-192-26
+
+spec:
+    # IPv4VXLANTunnelAddr, default Calico PodCIDR block is 26.
+    cidr: 10.1.187.192/26
+    # Node name
+    node: fadc-fake-node
+    deleted: "false"
+    state: confirmed
+```
+
+IPAMBlock is connect to BlockAffinity and node
+
+```
+apiVersion: crd.projectcalico.org/v1
+kind: IPAMBlock
+metadata:
+    # IPv4VXLANTunnelAddr
+    name: 10-1-187-192-26
+spec:
+    # IPv4VXLANTunnelAddr 
+    cidr: 10.1.187.192/26
+    affinity: host:fadc-fake-node
+```
+
+IPAMHandle is connected to IPAMBlock
+
+```
+apiVersion: crd.projectcalico.org/v1
+kind: IPAMHandle
+metadata:
+    name: vxlan-tunnel-addr-fadc-fake-node
+spec:
+    handleID: vxlan-tunnel-addr-fadc-fake-node
+    block:
+        # IPv4VXLANTunnelAddr 
+        10.1.187.192/26: 1
+
+```
+
+
+####Apply the Calico fake node to Kubernetes cluster
 
 	kubectl apply -f calico_fake_fadc_node.yaml
 
@@ -376,6 +440,9 @@ Download the virtualserver_postgres_ssl.yaml
     curl -k https://raw.githubusercontent.com/hsandy123/fortiadc-kubernetes-controller/refs/heads/main/customResource/virtualserver_postgres_ssl.yaml -o virtualserver_postgres_ssl.yaml
 
 Modify the VirtualServer Annotation in virtualserver_postgres_ssl.yaml to accommodate to your environment, ex: fortiadc-ip, fortiadc-admin-port, etc.. Also, modify the VirtualServer Spec, ex: address, contentRoutings.SourceAddress.  Then deploy the virtualserver with kubectl command
+
+>[!NOTE]
+>When configuring a Layer 4 VirtualServer, the default packet forwarding method is Full NAT.  Therefore, the `natSourcePoolList` field **must** be specified in the custom resource definition. Before deploying the VirtualServer CR, you **must** pre-configure a SNAT pool on the FortiADC.  The SNAT IP address range should **match the subnet of the VXLAN interface**, so that the return traffic is correctly routed.
 
     kubectl apply -f virtualserver_postgres_ssl.yaml
 
