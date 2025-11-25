@@ -4,8 +4,16 @@ metadata:
   name: {{ include "fadc-k8s-ctrl.serviceAccountName" . }}
 rules:
 - apiGroups: [""]
-  resources: ["pods", "services", "nodes", "endpoints", "secrets", "daemonsets"]
+  resources: ["pods", "services", "nodes", "endpoints", "secrets"]
   verbs: ["get", "watch", "list"]
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - watch
 - apiGroups:
   - networking.k8s.io
   resources:
