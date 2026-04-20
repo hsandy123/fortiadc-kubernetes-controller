@@ -53,6 +53,7 @@ parameters:
   virtualServerFortiGSLB : "optional"
   openshiftRouteSupport: "no"
   enableStaticRouteSupport: "no"
+  fortiadcVMName: "optional"
 webhook:
   useCertManager: true
   service:

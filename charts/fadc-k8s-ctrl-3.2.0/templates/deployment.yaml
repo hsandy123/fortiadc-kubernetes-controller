@@ -71,6 +71,8 @@ spec:
             value: "{{ .Values.parameters.openshiftRouteSupport }}"
           - name: EnableStaticRouteSupport
             value: "{{ .Values.parameters.enableStaticRouteSupport }}"
+          - name: FortiADCVMName
+            value: "{{ .Values.parameters.fortiadcVMName }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
