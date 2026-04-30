@@ -5,7 +5,7 @@
 image:
   repository: hsandy123/fortiadc-k8s-ctrl
   pullPolicy: IfNotPresent
-  tag: "3.2.0.16"
+  tag: "3.2.0.26"
 
 nameOverride: ""
 fullnameOverride: ""
@@ -53,7 +53,7 @@ parameters:
   virtualServerFortiGSLB : "optional"
   openshiftRouteSupport: "no"
   enableStaticRouteSupport: "no"
-  fortiadcVMName: "optional"
+  fortiadcVMName: ""
 webhook:
   useCertManager: true
   service:
